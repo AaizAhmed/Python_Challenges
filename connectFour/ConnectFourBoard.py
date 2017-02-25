@@ -5,13 +5,11 @@
 #
 # Description: This file set up a connect four board
 
-# Declaring variables ot be used
+import re
 
 class ConnectFourBoard:
 
     def __init__(self, rowNum = 5, colNum = 5):
-
-        # print("%d, %d" % (colNum, rowNum) )
 
         if rowNum < 5:
             rowNum = 5
@@ -26,7 +24,19 @@ class ConnectFourBoard:
         # Fill in the board with "-" char
         self.board = [ [ '-' for i in range(colNum) ] for j in range(rowNum) ]
 
-        self.printBoard()
+
+    def setBoard(self, lines, rowNum, colNum):
+
+        x = re.findall('\d+', lines[0])
+
+        self.row = rowNum
+        self.col = colNum
+        self.board = [['-' for i in range(colNum)] for j in range(rowNum)]
+
+        for i in range(1, rowNum + 1, +1):
+            for j in range (colNum):
+                self.board[i-1][j] = lines[i][j]
+
 
     # Print the board to see the current state of the game
     def printBoard(self):
@@ -34,16 +44,15 @@ class ConnectFourBoard:
         board = ""
 
         for x in range(self.row):
-
             for y in range(self.col):
-
                 board += self.board[x][y]
-
             board += '\n'
 
         print(board)
 
-
+    # Make a valid move
+    # @arg player: Player 0 or 1
+    # @arg colNum: Column number
     def makeMove(self, player, colNum):
 
         if colNum > 0 and colNum <= self.col:
@@ -152,10 +161,10 @@ class ConnectFourBoard:
 
     def winAll(self):
 
-        print( self.horizontalWin() )
-        print( self.verticalWin() )
-        print( self.diagonallWinOne() )
-        print( self.diagonallWinTwo() )
+        # print( self.horizontalWin() )
+        # print( self.verticalWin() )
+        # print( self.diagonallWinOne() )
+        # print( self.diagonallWinTwo() )
 
         if self.verticalWin() is True or self.horizontalWin() is True or \
            self.diagonallWinOne() is True or self.diagonallWinTwo() is True:
@@ -166,22 +175,29 @@ class ConnectFourBoard:
 # Unit Testing
 def main():
 
-    x = ConnectFourBoard(8, 8)
+    # x = ConnectFourBoard(8, 8)
+    #
+    # print( x.columnCheck(8) )
+    #
+    # x.makeMove(0, 8)
+    # x.makeMove(1, 8)
+    # x.makeMove(0, 8)
+    # x.makeMove(1, 8)
+    # x.makeMove(0, 8)
+    # x.makeMove(1, 8)
+    # x.makeMove(0, 8)
+    # x.makeMove(1, 8)
+    #
+    # print( x.columnCheck(8) )
+    #
+    # x.printBoard()
 
-    print( x.columnCheck(8) )
+    z = "Rows: 60 Cols: 64 Turn: 8"
 
-    x.makeMove(0, 8)
-    x.makeMove(1, 8)
-    x.makeMove(0, 8)
-    x.makeMove(1, 8)
-    x.makeMove(0, 8)
-    x.makeMove(1, 8)
-    x.makeMove(0, 8)
-    x.makeMove(1, 8)
+    x = re.compile('\d+')
+    y = x.findall(z)
 
-    print( x.columnCheck(8) )
-
-    x.printBoard()
+    print( y )
 
 # Run the program by calling the main
 # main()
