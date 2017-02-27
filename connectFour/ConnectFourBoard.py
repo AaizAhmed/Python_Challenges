@@ -5,10 +5,13 @@
 #
 # Description: This file set up a connect four board
 
-import re
-
 class ConnectFourBoard:
 
+    ##
+    # Constructor: Instantiates a Connect Board
+    # @:param     number of rows
+    # @:param     number of columns
+    #
     def __init__(self, rowNum = 5, colNum = 5):
 
         if rowNum < 5:
@@ -25,20 +28,29 @@ class ConnectFourBoard:
         self.board = [ [ '-' for i in range(colNum) ] for j in range(rowNum) ]
 
 
+    ##
+    #  This method set up the board and assign rows, cols in case the player loads a saved game form a file.
+    #  @:param   lines ==> an array containing stored game data
+    #  @:param     number of rows
+    #  @:param     number of cols
+    #
     def setBoard(self, lines, rowNum, colNum):
-
-        x = re.findall('\d+', lines[0])
 
         self.row = rowNum
         self.col = colNum
+
+        # Reassign the board to the provided dimensions
         self.board = [['-' for i in range(colNum)] for j in range(rowNum)]
 
+        # Change the board elements to match the old game board
         for i in range(1, rowNum + 1, +1):
             for j in range (colNum):
                 self.board[i-1][j] = lines[i][j]
 
 
+    #
     # Print the board to see the current state of the game
+    #
     def printBoard(self):
 
         board = ""
@@ -50,14 +62,16 @@ class ConnectFourBoard:
 
         print(board)
 
-    # Make a valid move
-    # @arg player: Player 0 or 1
-    # @arg colNum: Column number
+    ##
+    # This method makes a valid move
+    # @:param   player: Player 0 or 1
+    # @:param   colNum: Column number
+    #
     def makeMove(self, player, colNum):
 
-        if colNum > 0 and colNum <= self.col:
+        if 0 < colNum <= self.col:
 
-            # number rows and columns to be accessed
+            # number of rows and columns to be accessed
             row = self.row - 1
             col = colNum - 1
 
@@ -74,9 +88,13 @@ class ConnectFourBoard:
                     return   # return beacuse we do not want loop to fill rest of the columns
     #   End of function
 
+    ##
+    # This method check if the given column is already full
+    # @:param   column number to be checked
+    #
     def columnCheck(self, colNum):
 
-        if colNum >= 0 and colNum <= self.col:
+        if 0 < colNum <= self.col:
 
             col = colNum - 1
 
@@ -87,14 +105,23 @@ class ConnectFourBoard:
 
         return False
 
+    ##
+    #  A win occurs in Connect Four if 4 symbols are side by side.
+    #  This can happen vertically, horizontally and diagonally.
+    #  This method checks for the horizontal win condition.
+    # @:return    True or False
+    #
+
     def horizontalWin(self):
 
         for i in range(self.row):
 
+            # Col - 3 will ensure that we don't go out of index while checking the win condition
             for j in range(self.col - 3):
 
                 if self.board[i][j] == 'X':
 
+                    # Check if next 3 elements are the same symbol as this one.
                     if self.board[i][j+1] == 'X' and self.board[i][j+2] == 'X' and self.board[i][j+3] == 'X':
                         return True
 
@@ -105,6 +132,10 @@ class ConnectFourBoard:
 
         return False
 
+    ##
+    # This method checks for the vertical win condition
+    # @:return   True or False
+    #
     def verticalWin(self):
 
         for i in range(self.col):
@@ -113,16 +144,20 @@ class ConnectFourBoard:
 
                 if self.board[j][i] == 'X':
 
-                    if self.board[j + 1][i] == 'X' and self.board[j + 2][i] == 'X' and self.board[j + 3][i] == 'X':
+                    if self.board[j+1][i] == 'X' and self.board[j+2][i] == 'X' and self.board[j+3][i] == 'X':
                         return True
 
                 elif self.board[j][i] == 'O':
 
-                    if self.board[j + 1][i] == 'O' and self.board[j + 2][i] == 'O' and self.board[j + 3][i] == 'O':
+                    if self.board[j+1][i] == 'O' and self.board[j+2][i] == 'O' and self.board[j+3][i] == 'O':
                         return True
 
         return False
 
+    ##
+    # This method checks diagonal win condition from top left to bottom right
+    # @:return True or False
+    #
     def diagonallWinOne(self):
 
         for i in range(self.row - 3):
@@ -141,6 +176,10 @@ class ConnectFourBoard:
 
         return False
 
+    ##
+    # This method checks diagonal win condition from bottom left to top right
+    # @:return True or False
+    #
     def diagonallWinTwo(self):
 
         for i in range(self.row - 1, 3, -1):
@@ -159,12 +198,11 @@ class ConnectFourBoard:
 
         return False
 
+    ##
+    # This method checks all 4 win conditions
+    # @:return True or False
+    #
     def winAll(self):
-
-        # print( self.horizontalWin() )
-        # print( self.verticalWin() )
-        # print( self.diagonallWinOne() )
-        # print( self.diagonallWinTwo() )
 
         if self.verticalWin() is True or self.horizontalWin() is True or \
            self.diagonallWinOne() is True or self.diagonallWinTwo() is True:

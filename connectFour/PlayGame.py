@@ -10,6 +10,7 @@ import re
 
 def main():
 
+    # Global variables for storing game state
     global rows, cols, turn, board, firstRun, loadFailed
     turn = 0
     board = ConnectFourBoard.ConnectFourBoard()
@@ -22,6 +23,8 @@ def main():
 
     while True:
 
+        # Run till user gives correct input i.e. y or n
+
         print("Do you want to load a saved game? y/n: ")
         ans = input()
 
@@ -33,11 +36,13 @@ def main():
         print("Enter the file name: ")
         name = input()
 
+        # Read from the file in the try/expect block
         try:
 
             with open(name) as f:
                 lines = f.read().splitlines()
 
+            # Use regex to get rows, cols and turn
             x = re.findall('\d+', lines[0])
 
             rows = int(x[0])
@@ -55,6 +60,9 @@ def main():
     while again != 'n':
 
         # If the user did not load a game from file get the rows and columns
+        # If this file loading failed get rows and cols
+        # If user loaded the file, finished the game and wanted to play again, get rows and cols
+
         if ans == "n" or firstRun is False or loadFailed is True:
 
             while True:
@@ -84,7 +92,7 @@ def main():
         if ans == 'y':
             firstRun = False
 
-        startGame(rows, cols, turn)
+        startGame()
 
         while True:
             print("Do you want to play again? (y/n): ")
@@ -94,14 +102,14 @@ def main():
                 break
 
 
-def startGame(rows, cols, turn):
+def startGame():
 
     for i in range(turn, rows*cols, +1):
 
         if i % 2 == 0:
 
             print("Player 1: What is your choice?")
-            colNum = isValid(1, "", i)
+            colNum = isValid(1, i)
 
             board.makeMove(0, colNum)
             board.printBoard()
@@ -113,7 +121,7 @@ def startGame(rows, cols, turn):
         else:
 
             print("Player 2: What is your choice?")
-            colNum = isValid(2, "", i)
+            colNum = isValid(2, i)
 
             board.makeMove(1, colNum)
             board.printBoard()
@@ -124,8 +132,12 @@ def startGame(rows, cols, turn):
 
     print("There was a draw!")
 
-
-def isValid(player, colNum, moveNum):
+##
+# Check if the column entered by the player is valid or not
+# Additionally, save the game if user types s
+# @:return  A valid column number given by the user
+#
+def isValid(player, moveNum):
 
     while True:
 
@@ -138,9 +150,9 @@ def isValid(player, colNum, moveNum):
 
             if board.columnCheck(colNum) is True:
                 print("The column you entered is already full.")
-                # print("Please enter a valid column number: 1 to %d or s to save the game" % cols)
 
-            if board.columnCheck(colNum) is False and (colNum > 0 and colNum <= cols ):
+            # Check if column is already full
+            if board.columnCheck(colNum) is False and (0 < colNum <= cols):
                 return colNum
 
         if colNum == 's':
