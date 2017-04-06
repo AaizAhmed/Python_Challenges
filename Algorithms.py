@@ -51,9 +51,38 @@ def nthFib(num):
 
     return nextNum
 
-print( nthFib(2) )
-print( nthFib(3) )
-print( nthFib(5) )
-print( nthFib(8) )
+def permute(prefix, permStr):
+
+    length = len(permStr)
+
+    if length == 0:
+        print(prefix)
+    else:
+        for index in range(length):
+            permute(prefix+permStr[index], permStr[0:index]+permStr[index+1:length])
+
+
+def permute_2(permStr, first, last):
+
+    if first == last:
+        print(permStr)
+    else:
+        for index in range(first, last, +1):
+            permStr = swap(permStr, first, index)
+            permute_2(permStr, first+1, last)
+            permStr = swap(permStr, first, index)
+
+def swap(permStr, first, last):
+
+    charStr = list(permStr)
+
+    tmp = charStr[first]
+    charStr[first] = charStr[last]
+    charStr[last] = tmp
+
+    return ''.join(charStr)
+
+permute_2('abc', 0, 3)
+myStr = 'abc'
 
 
