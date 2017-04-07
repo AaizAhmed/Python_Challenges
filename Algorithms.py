@@ -1,4 +1,6 @@
 import math
+# from cloudinit.sources.DataSourceAzure import AGENT_START
+
 
 def isPrime(num):
 
@@ -82,7 +84,36 @@ def swap(permStr, first, last):
 
     return ''.join(charStr)
 
-permute_2('abc', 0, 3)
-myStr = 'abc'
+def reverseStr(rStr):
+    # Can also use
+    # 1 ==> myStr = ''.join(rStr[i] for i in range(len(rStr)-1, -1, -1))
+    # 2 ==> reversed() method after converting to a list
 
+    return rStr[::-1]
+
+def reverseWords(string):
+
+    strArray = string.split()
+    rStr = ''
+
+    for index in range(len(strArray)-1, -1, -1):
+        rStr += strArray[index] + ' '
+
+    return rStr
+
+def reverseInPlace(string):
+
+    strArray = string.split()
+    rStr = ''
+
+    for index in range(len(strArray)):
+        tmpStr = list(strArray[index])
+        tmpStr.reverse()
+
+        rStr += ''.join(tmpStr) + ' '
+
+    return rStr
+
+x = 'I am the good boy'
+print ( reverseInPlace(x) )
 
